@@ -1,25 +1,33 @@
-const fs = require('fs');
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
-// fs.readFile('./files/open.txt',  'utf8', (err, data) =>{
+// fs.readFile("./files/open.txt", "utf8", (err, data) => {
+//   if (err) throw err;
+//   console.log(data);
+// });
+
+// fs.readFile(path.join(__dirname, "files", "open.txt"), "utf8", (err, data) => {
+//   if (err) throw err;
+//   console.log(data);
+// });
+
+// fs.writeFile(
+//   path.join(__dirname, "files", "late.txt"),
+//   "Omo we always late during Team lead class the guy get problem",
+//   (err, data) => {
 //     if (err) throw err;
-//     console.log(data)
-// })
+//     console.log("data");
+//   }
+// );
 
-// fs.readFile(path.join(__dirname, "files", "open.txt"),  'utf8', (err, data) =>{
+// fs.appendFile(
+//   path.join(__dirname, "files", "late.txt"),
+//   "\n\nGuys remain async put your mind together",
+//   (err, data) => {
 //     if (err) throw err;
-//     console.log(data)
-// })
-
-fs.writeFile(path.join(__dirname, "files", "late.txt"), 'Omo we always late during Team lead class the guy get problem', (err, data) =>{
-    if (err) throw err;
-    console.log('data')
-})
-
-fs.appendFile(path.join(__dirname, "files", "late.txt"), '\n\nGuys remain async put your mind together', (err, data) =>{
-    if (err) throw err;
-    console.log('follow follow')
-})
+//     console.log("follow follow");
+//   }
+// );
 
 // fs.appendFile(path.join(__dirname, "files", "open.txt"), '\n\n\nClosing period please', (err, data) =>{
 //     if (err) throw err;
@@ -31,9 +39,29 @@ fs.appendFile(path.join(__dirname, "files", "late.txt"), '\n\nGuys remain async 
 //     console.log('name change')
 // })
 
-console.log('Zainab')
+fs.writeFile(
+  "server.js",
+  `const fsPromises = require("fs").promises;`,
+  "utf8",
+  (err) => {
+    if (err) throw err;
+    console.log("file created!");
 
-process.on('uncaughtException', err => {
-    console.error(`There was an uncaught error :${err}`)
-    process.exit(1)
-})
+    fs.appendFile(
+      "server.js",
+      `\nconst path = require("path")`,
+      "utf8",
+      (err) => {
+        if (err) throw err;
+        console.log("Content added");
+      }
+    );
+  }
+);
+
+console.log("Zainab");
+
+process.on("uncaughtException", (err) => {
+  console.error(`There was an uncaught error :${err}`);
+  process.exit(1);
+});
