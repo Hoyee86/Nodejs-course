@@ -1,9 +1,47 @@
 const express = require('express');
 const app = express();
 const path = require("path");
+const { logger } = require('./middleware/logEvent');
+const cors = require("cors");
 
 
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 4500;
+
+// custom middleware
+app.use(logger);
+
+const whiteList = [
+    "https://your-site.com",
+    "http://localhost:3000",
+    "https://www.google.com",
+]
+
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if(whiteList.indexOf(origin) !== -1 || origin) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    
+    optionSuccessStatus: 200
+}
+
+app.use(cors());
+
+
+// built in middleware, to handle url encodad data in other word=> form data: 'contentype' application/x-www-form-urlencoded
+
+app.use(express.urlencoded({extended: false}));
+
+
+// to handle json responses
+app.use(express.json());
+
+
+
 
 //serving static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -71,8 +109,6 @@ app.all("*", (req, res) => {
 
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`));
-
-
 
 
 
