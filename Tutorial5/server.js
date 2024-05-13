@@ -60,7 +60,8 @@ app.get("/old-page(.html)?", (req, res) => {
 }) 
 
 
-// ROUTE HANDLER => This is to access the page that we are file or folder for
+// ROUTE HANDLER => This is to access the page that we are not inside the file or folder for
+                 //
 
 app.get("/hello(.html)?", (req, res, next) => {
    console.log("You are trying to acees hello.html");
