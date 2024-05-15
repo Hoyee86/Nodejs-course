@@ -5,6 +5,7 @@ const employeesController = require("../../controller/employeeController")
 
 
 const path = require('path');
+// const verifyJwt = require('../../middleware/verifyJWT');
 
 // First method
 // router.get("/",  (req, res) =>{

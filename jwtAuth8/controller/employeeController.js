@@ -12,6 +12,7 @@ const data = {
 
 const getAllEmployees = (req, res) =>{
     res.json(data.employees)
+    // console.log(data.employees)
 }
 
 
