@@ -12,33 +12,42 @@ const bcrypt = require("bcrypt");
 const handleNewUser = async (req, res) => {
   const { user, pwd } = req.body;
 
-  if (!user || !pwd)
+  // Check for missing username or password
+  if (!user || !pwd) {
     return res
-      .status(404)
+      .status(400) // 400 Bad Request is more appropriate for validation errors
       .json({ message: "Username and password are required" });
+  }
 
+  // Check for duplicate user
   const duplicate = usersDB.users.find((person) => person.username === user);
-  if (duplicate) return res.sendStatus(409); // meaning conflict
+  if (duplicate) {
+    return res.sendStatus(409); // 409 Conflict
+  }
 
   try {
-    // encrypting the password
-    const hashedpsw = await bcrypt.hash(pwd, 10);
+    // Encrypting the password
+    const hashedPwd = await bcrypt.hash(pwd, 10);
 
-    // storing the new user
-    const newUser = { 'username': user, 'password': hashedpsw };
-    usersDB.setUsers([...usersDB.users, newUser]);
+    // Storing the new user
+    const newUser = { username: user, password: hashedPwd };
+    const updatedUsers = [...usersDB.users, newUser];
+    usersDB.setUsers(updatedUsers);
+
+    // Write updated users to file
     await fspromises.writeFile(
       path.join(__dirname, "..", "model", "users.json"),
-      JSON.stringify(usersDB.users)
+      JSON.stringify(usersDB.users, null, 2) // Pretty-print JSON with 2-space indentation
     );
+
+    // Log updated users (for debugging purposes, can be removed in production)
     console.log(usersDB.users);
 
-    res.status(201).json({'success': `New User ${user} created!`}) // meaning created
+    res.status(201).json({ success: `New User ${user} created!` }); // 201 Created
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message }); // 500 Internal Server Error
   }
 };
-
 
 module.exports = {
   handleNewUser
